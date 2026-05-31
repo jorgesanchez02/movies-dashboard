@@ -153,4 +153,4 @@ if btn_insertar:
 
 # PIE DE PÁGINA
 st.markdown("---")
-st.caption(f"Total de filmes en la base de datos: {len(df_base)"})
+st.caption(f"Total de filmes en la base de datos: {len(df_base)}")
