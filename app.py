@@ -7,8 +7,6 @@ Original file is located at
     https://colab.research.google.com/drive/15S_wicZzVsEJ0oPEze82Be6eT-52rz48
 """
 
-!pip install streamlit
-
 import streamlit as st
 import pandas as pd
 import firebase_admin
