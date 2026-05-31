@@ -24,21 +24,19 @@ st.set_page_config(
 # CONEXIÓN A FIRESTORE
 
 def init_firebase():
-    """Inicializa la conexión a Firebase usando los secrets de Streamlit."""
+    #Inicia conexión con Firebase usando los secrets de Streamlit
     if not firebase_admin._apps:
         cred_dict = dict(st.secrets["firebase"])
         cred = credentials.Certificate(cred_dict)
         firebase_admin.initialize_app(cred)
     return firestore.client()
 
-# FUNCIÓN PRINCIPAL: LECTURA DE FIRESTORE
+# LECTURA DE FIRESTORE
 
 @st.cache_data(ttl=300)
 def obtener_todos_los_filmes():
-    """
-    Lee todos los registros de Firestore y los retorna como DataFrame.
-    Se llama al arranque de la aplicación para almacenar el dataset base.
-    """
+    
+    #Leer todos los registros de Firestore y convertirlos a DataFrame."
     db = init_firebase()
     coleccion = db.collection("movies")
     documentos = coleccion.get()
@@ -53,7 +51,7 @@ def obtener_todos_los_filmes():
     return df
 
 def insertar_filme(company, director, genre, name):
-    """Inserta un nuevo filme en la colección de Firestore."""
+    #Función para agregar nuevos filmes en la colección
     db = init_firebase()
     coleccion = db.collection("movies")
     nuevo_filme = {
@@ -65,15 +63,14 @@ def insertar_filme(company, director, genre, name):
     coleccion.add(nuevo_filme)
 
 def buscar_por_titulo(df, titulo):
-    """Filtra el DataFrame por título (búsqueda de tipo 'contiene', sin distinción mayúsculas/minúsculas)."""
+    #Filtrar por título
     return df[df["name"].str.contains(titulo, case=False, na=False)]
 
 def filtrar_por_director(df, director):
-    """Filtra el DataFrame por director y devuelve los resultados."""
+    #Filtrar por director
     return df[df["director"] == director]
 
 # CARGAR DATASET AL ARRANQUE
-
 df_base = obtener_todos_los_filmes()
 
 # INTERFAZ PRINCIPAL
@@ -127,7 +124,7 @@ if btn_filtrar:
     else:
         st.warning("No se encontraron filmes para este director.")
 
-# 4. FORMULARIO: INSERTAR NUEVO FILME
+# 4. CAMPOS PARA INSERTAR NUEVO FILME
 st.sidebar.markdown("---")
 st.sidebar.subheader("➕ Agregar nuevo filme")
 
@@ -154,8 +151,6 @@ if btn_insertar:
     else:
         st.sidebar.warning("El título y el director son obligatorios.")
 
-# ─────────────────────────────────────────────
 # PIE DE PÁGINA
-# ─────────────────────────────────────────────
 st.markdown("---")
-st.caption(f"Total de filmes en la base de datos: {len(df_base)} | Tecnológico de Monterrey")
+st.caption(f"Total de filmes en la base de datos: {len(df_base)})
